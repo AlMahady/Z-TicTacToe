@@ -111,15 +111,18 @@ function handlesquareClick(index: number) {
   if (state[index] || getwinner(state)) return;
 
   const updateBoard = [...state];
-updateBoard[index] = turnX ? "X" : "O";
-setTurnX(!turnX);
 
   if (mode === "multiplayer") {
-    setTurnX(!turnX); // multiplayer mode uses turns
+    updateBoard[index] = turnX ? "X" : "O";
+    upState(updateBoard);
+    setTurnX(!turnX);
     return;
   }
 
-  // Check if player won or draw before bot plays
+  // Single-player mode (player is always X)
+  updateBoard[index] = "X";
+  upState(updateBoard);
+
   if (getwinner(updateBoard) || updateBoard.every(sq => sq)) return;
 
   // Bot move
@@ -132,18 +135,9 @@ setTurnX(!turnX);
 
     if (emptySquares.length === 0) return;
 
-    if (mode === "easy") {
-      // Random move
-      botMove = emptySquares[Math.floor(Math.random() * emptySquares.length)];
-    } 
-    else if (mode === "medium") {
-      // Try to win or block, else random
-      botMove = findBestMoveMedium(updateBoard, emptySquares);
-    } 
-    else if (mode === "hard") {
-      // Unbeatable minimax
-      botMove = findBestMoveHard(updateBoard);
-    }
+    if (mode === "easy") botMove = emptySquares[Math.floor(Math.random() * emptySquares.length)];
+    else if (mode === "medium") botMove = findBestMoveMedium(updateBoard, emptySquares);
+    else if (mode === "hard") botMove = findBestMoveHard(updateBoard);
 
     if (botMove !== null) {
       updateBoard[botMove] = "O";
@@ -151,6 +145,7 @@ setTurnX(!turnX);
     }
   }, 500);
 }
+
 
 
 
