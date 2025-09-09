@@ -111,8 +111,8 @@ function handlesquareClick(index: number) {
   if (state[index] || getwinner(state)) return;
 
   const updateBoard = [...state];
-  updateBoard[index] = "X"; // Player always X
-  upState(updateBoard);
+updateBoard[index] = turnX ? "X" : "O";
+setTurnX(!turnX);
 
   if (mode === "multiplayer") {
     setTurnX(!turnX); // multiplayer mode uses turns
